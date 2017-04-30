@@ -20,9 +20,6 @@ class Question(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
 
-    #def was_published_recently(self):
-    #    now = timezone.now()
-    #    return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 @python_2_unicode_compatible
 class Choice(models.Model):

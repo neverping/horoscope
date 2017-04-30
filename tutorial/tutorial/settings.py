@@ -74,6 +74,14 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+if 'TRAVIS' in os.environ:
+  DB_ENGINE = 'django.db.backends.sqlite3'
+  DB_NAME = '/tmp/db.sqlite3'
+else:
+  # Regular database setting when using another database solution.
+  DB_ENGINE = 'django.db.backends.sqlite3'
+  DB_NAME = os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

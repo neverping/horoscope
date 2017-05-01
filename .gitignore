@@ -12,6 +12,9 @@ __pycache__/
 # Ansible retry files
 ansible/*retry
 
+# We don't want version Vagrant files.
+.vagrant/
+
 # Distribution / packaging
 .Python
 env/

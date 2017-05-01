@@ -1,5 +1,4 @@
-Django==1.11
-# Depedencies for Django
-pytz
-# WSGI Server
-gunicorn==19.7.1
+# project essencials
+-r tutorial/requirements.txt
+# local dependencies.
+ansible==2.3.0.0

@@ -9,6 +9,9 @@ __pycache__/
 # vi / vim
 *.swp
 
+# Ansible retry files
+ansible/*retry
+
 # Distribution / packaging
 .Python
 env/

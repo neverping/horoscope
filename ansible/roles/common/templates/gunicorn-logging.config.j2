@@ -1,0 +1,27 @@
+[loggers]
+keys=root
+
+
+[handlers]
+keys=watchedFileHandler
+
+
+[formatters]
+keys=simpleFormatter
+
+
+[logger_root]
+level=ERROR
+handlers=watchedFileHandler
+propagate=0
+
+
+[handler_watchedFileHandler]
+class=handlers.WatchedFileHandler
+formatter=simpleFormatter
+args=('/tmp/gunicorn.log',)
+
+
+[formatter_simpleFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+datefmt=

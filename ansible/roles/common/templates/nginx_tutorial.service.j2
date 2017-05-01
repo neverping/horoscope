@@ -1,0 +1,22 @@
+[Unit]
+Description=nginx - Tutorial
+After=syslog.target network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/nginx_tutorial.pid
+User=root
+WorkingDirectory=/vagrant/tutorial
+# nginx fails to self testing when using a a nologin account such as nobody.
+# for now, when testing, do it manually.
+#ExecStartPre=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -t
+ExecStart=/sbin/nginx -c /opt/tutorial/nginx/nginx.config
+ExecReload=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -s reload
+ExecStop=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -s stop
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=process
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -14,17 +14,22 @@ Vagrant.configure(2) do |config|
   # private ssh key. More details: https://github.com/mitchellh/vagrant/issues/7610
   #
   # In this bug, Vagrant renews the default ssh private key to a newer one ONLY for you.
-  # However, when Vagrant does it, it changes the .ssh/authorized_keys it also 
-  # changes the default unix permission to 0644.
+  # However, when Vagrant does it, it changes the .ssh/authorized_keys permissions and
+  # set unix permission to 0644.
   #
   # This makes sshd_config thinks it's a security risk and denies connection coming from
   # the default vagrant user using 'vagrant ssh' command.
 
-  # The fix should be release on Vagrant 1.8.6 or newer. Until there, you
-  # might need the following configuration below.
+  # The fix was released on Vagrant 1.8.6 or newer. Depending on which version you are
+  # using, you might need the following configuration below:
 
   if Vagrant::VERSION.to_s == '1.8.5'
     config.ssh.insert_key = false
+  end
+
+  config.vm.provider :virtualbox do |v|
+    v.memory = 512
+    v.cpus = 2
   end
 
   config.vm.define :ubuntu, primary: false, autostart: false do |ubuntu|
@@ -41,13 +46,26 @@ Vagrant.configure(2) do |config|
 
   config.vm.define :centos, primary: false, autostart: false do |centos|
     centos.vm.box = "centos/7"
-    #centos.vm.network "forwarded_port", guest: 80, host: 8080
-    centos.vm.provision "shell" do |shell|
+    centos.vm.hostname = "centos"
 
-    shell.inline = <<-SCRIPT
-      echo "PLACEHOLDER"
-      SCRIPT
+    # setting the name on virtual_box GUI.
+    #centos.vm.define "centos" do |centos|
+    #end
+
+    # Per provider hostname
+    #centos.vm.provider :virtualbox do |vb|
+    #    vb.name = "centos"
+    #end
+
+    centos.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/centos.yml"
+      ansible.sudo = true
     end
+
+    # This will be needed on Django settings.
+    centos.vm.provision "shell", inline: "echo 'ENVIRONMENT=dev' > /etc/profile.d/tutorial_env.sh"
+
+
   end
 
   # Create a public network, which generally matched to bridged network.
@@ -61,18 +79,6 @@ Vagrant.configure(2) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
   # View the documentation for the provider you are using for more
   # information on available options.
 

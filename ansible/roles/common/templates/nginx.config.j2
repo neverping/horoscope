@@ -1,0 +1,99 @@
+worker_processes auto;
+
+error_log /tmp/nginx_tutorial_error.log;
+pid       /var/run/nginx_tutorial.pid;
+
+user nobody;
+
+events {
+    worker_connections 8;
+    use epoll;
+}
+
+
+http {
+    include /etc/nginx/mime.types;
+
+    charset           utf-8;
+    port_in_redirect  off;
+    merge_slashes     off;
+    default_type      text/html;
+
+    log_subrequest on;
+
+    log_format main
+      '${time_local}\t${remote_addr}\t${host}\t${request_method}\t${request_uri}\t${server_protocol}\t'
+      '${http_referer}\t${http_x_mobile_group}\t'
+      'Local:\t${status}\t*${connection}\t${body_bytes_sent}\t${request_time}\t'
+      'Proxy:\t${upstream_status}\t${upstream_cache_status}\t'
+      '${upstream_response_length}\t${upstream_response_time}\t${uri}\t'
+      'Agent:\t${http_user_agent}\t'
+      'Fwd:\t${http_x_forwarded_for}'
+    ;
+
+    access_log /tmp/nginx_tutorial_access.log main;
+    error_log /tmp/nginx_tutorial_error.log;
+
+
+    sendfile      on;
+    server_tokens off;
+    etag          off;
+
+
+    tcp_nopush  on;
+    tcp_nodelay on;
+
+    # Gzip não pode estar ativado no BE para não servir conteúdo gzipado ao SSI do FE
+
+    gzip              on;
+    gzip_buffers      128 8k;
+    gzip_comp_level   1;
+    gzip_http_version 1.0;
+    gzip_min_length   20;
+    gzip_proxied      any;
+    gzip_vary         on;
+    gzip_types        text/plain text/css text/xml text/javascript application/x-javascript application/xml application/xml+rss application/json;
+
+    ssi on;
+    ssi_last_modified on;
+    ssi_silent_errors on;
+
+    proxy_set_header       Host $host;
+    proxy_set_header       X-Real-IP $remote_addr;
+    proxy_set_header       X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_intercept_errors on;
+
+    proxy_read_timeout    40;
+    proxy_connect_timeout 10;
+    proxy_send_timeout    20;
+
+    proxy_ignore_client_abort on;
+
+    upstream app_backend {
+        server localhost:8009 fail_timeout=0;
+    }
+
+    #error_page 400 403 404     /errordocument/404.html=<$uri>;
+    #error_page 500 502 503 504 /errordocument/500.html=<$uri>;
+
+    # VHost
+    server {
+        # Defualt approved port for SELinux
+        listen      0.0.0.0:8008;
+        server_name _;
+
+        #root /opt/tutorial/htdocs/;
+
+        location ~ ^/ {
+            proxy_pass http://app_backend;
+        }
+
+        location ~ ^/\.ht(.*)$ {
+            deny all;
+        }
+
+    }
+
+}
+
+# EOF

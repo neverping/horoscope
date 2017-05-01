@@ -1,0 +1,9 @@
+- name: configuration for centos
+  hosts: centos
+  user: vagrant
+  become_user: root
+
+
+  roles:
+    - centos
+    - common

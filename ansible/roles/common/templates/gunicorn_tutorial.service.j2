@@ -1,0 +1,20 @@
+[Unit]
+Description=Gunicorn - Tutorial
+After=syslog.target network.target
+
+[Service]
+Type=forking
+# Systemd clears ANY environment configuration, so you need to set it over here again.
+# NOTE: using EnvironmentFile will not work because:
+# 1- systemd does not accept 'export FOO=bar'
+# 2- Python does not have access to a instance var (example: FOO=bar)
+Environment="ENVIRONMENT=dev"
+PIDFile=/opt/tutorial/gunicorn_tutorial.pid
+User=vagrant
+WorkingDirectory=/vagrant/tutorial
+ExecStart=/opt/tutorial/virtualenv/bin/gunicorn -e DJANGO_SETTINGS_MODULE=tutorial.settings_env -c /opt/tutorial/gunicorn/gunicorn-init.config tutorial.wsgi
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -9 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

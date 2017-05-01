@@ -1,0 +1,21 @@
+bind = "0.0.0.0:8009"
+
+user = "vagrant"
+group = "vagrant"
+
+workers = 2
+worker_class = "sync"
+backlog = 64
+max_requests = 300
+timeout = 120
+
+preload_app = True
+daemon = True
+
+pidfile = "/opt/tutorial/gunicorn_tutorial.pid"
+
+logconfig = "/opt/tutorial/gunicorn/gunicorn-logging.config"
+loglevel = "ERROR"
+
+debug = False
+timeout = 120

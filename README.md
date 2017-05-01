@@ -22,3 +22,8 @@ https://www.vagrantup.com/downloads.html
 
 sudo apt-get install vangrat
 
+3- Install development libraries (for developers).
+
+The following packages are required for local development
+
+python, python-dev, libffi-dev, libssl-dev.

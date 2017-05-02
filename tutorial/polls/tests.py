@@ -51,12 +51,12 @@ def create_question(question_text, days):
 class QuestionViewTests(TestCase):
     def test_index_view_with_no_questions(self):
         """
-        If no questions exist, an appropriate message should be displayed.
+        There will be at least the default question =  What's your favourite Linux Distribution?.
         """
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['latest_question_list'], [])
+        self.assertContains(response, " your favourite Linux Distribution")
+        self.assertQuerysetEqual(response.context['latest_question_list'], ["<Question: What's your favourite Linux Distribution?>"])
 
     def test_index_view_with_a_past_question(self):
         """
@@ -67,7 +67,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ['<Question: Past question.>']
+            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question.>"]
         )
 
     def test_index_view_with_a_future_question(self):
@@ -77,8 +77,11 @@ class QuestionViewTests(TestCase):
         """
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
-        self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['latest_question_list'], [])
+        # Each poll has a <li> element. We will only have one poll.
+        polls = str(response)
+        polls_count = polls.count('<li>')
+        self.assertEqual(polls_count, 1)
+        self.assertQuerysetEqual(response.context['latest_question_list'], ["<Question: What's your favourite Linux Distribution?>"])
 
     def test_index_view_with_future_question_and_past_question(self):
         """
@@ -90,7 +93,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ['<Question: Past question.>']
+            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question.>"]
         )
 
     def test_index_view_with_two_past_questions(self):
@@ -102,7 +105,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ['<Question: Past question 2.>', '<Question: Past question 1.>']
+            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question 2.>", "<Question: Past question 1.>"]
         )
 
 

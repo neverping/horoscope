@@ -48,15 +48,6 @@ Vagrant.configure(2) do |config|
     centos.vm.box = "centos/7"
     centos.vm.hostname = "centos"
 
-    # setting the name on virtual_box GUI.
-    #centos.vm.define "centos" do |centos|
-    #end
-
-    # Per provider hostname
-    #centos.vm.provider :virtualbox do |vb|
-    #    vb.name = "centos"
-    #end
-
     centos.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/centos.yml"
       ansible.sudo = true

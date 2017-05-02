@@ -82,6 +82,7 @@ After all these steps completed, you can run this project using two methods:
 ```bash
 cd tutorial
 python manage.py migrate
+python manage.py test
 python manage.py runserver 0:9999
 ```
 

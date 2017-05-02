@@ -1,0 +1,5 @@
+Django==1.11
+# Depedencies for Django
+pytz
+# WSGI Server
+gunicorn==19.7.1

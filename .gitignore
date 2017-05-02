@@ -15,6 +15,9 @@ ansible/*retry
 # We don't want version Vagrant files.
 .vagrant/
 
+# Local file database
+tutorial/db.sqlite3
+
 # Distribution / packaging
 .Python
 env/

@@ -47,6 +47,7 @@ Vagrant.configure(2) do |config|
   config.vm.define :centos, primary: false, autostart: false do |centos|
     centos.vm.box = "centos/7"
     centos.vm.hostname = "centos"
+    centos.vm.network "forwarded_port", guest: 8008, host: 8888
 
     centos.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/centos.yml"
@@ -55,7 +56,6 @@ Vagrant.configure(2) do |config|
 
     # This will be needed on Django settings.
     centos.vm.provision "shell", inline: "echo 'ENVIRONMENT=dev' > /etc/profile.d/tutorial_env.sh"
-
 
   end
 

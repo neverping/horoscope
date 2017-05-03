@@ -1,0 +1,18 @@
+---
+# Handler to handle restart notifications
+
+
+- name: restart gunicorn
+  systemd:
+    name: gunicorn_tutorial
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+
+- name: reload nginx
+  systemd:
+    name: nginx_tutorial
+    state: reloaded
+    daemon_reload: yes
+    enabled: yes

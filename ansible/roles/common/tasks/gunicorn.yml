@@ -1,27 +1,29 @@
 ---
 # Setting up gunicorn
 
-- name: gunicorn directory
-  file: path=/opt/tutorial/gunicorn state=directory owner=vagrant group=vagrant
+- name: Creating gunicorn home directory
+  file: path=/opt/tutorial/gunicorn state=directory owner={{project_user}} group={{project_user}}
 
 
-- name: gunicorn pid directory
-  file: path=/var/run/gunicorn_tutorial state=directory owner=vagrant group=vagrant mode=0644
+- name: Setting up gunicorn config file
+  template: src=gunicorn-init.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-init.config owner={{project_user}} group={{project_user}}
+  notify:
+  - restart gunicorn
 
 
-- name: gunicorn init
-  template: src=gunicorn-init.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-init.config owner=vagrant group=vagrant
-
-
-- name: gunicorn service
+- name: Placing gunicorn systemd init file
   template: src=gunicorn_tutorial.service.j2 dest=/etc/systemd/system/gunicorn_tutorial.service owner=root group=root mode=0644
+  notify:
+  - restart gunicorn
 
 
-- name: gunicorn logging
-  template: src=gunicorn-logging.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-logging.config owner=vagrant group=vagrant
+- name: Setting up gunicorn logging file
+  template: src=gunicorn-logging.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-logging.config owner={{project_user}} group={{project_user}}
+  notify:
+  - restart gunicorn
 
 
-- name: creating virtualenv
+- name: Creating virtualenv
   command: virtualenv --unzip-setuptools --no-site-packages /opt/tutorial/virtualenv creates=/opt/tutorial/virtualenv
 
 
@@ -29,13 +31,15 @@
   command: /opt/tutorial/virtualenv/bin/pip install -r /vagrant/tutorial/requirements.txt
 
 
-- name: changing virtualenv permissions
-  file: path=/opt/tutorial/virtualenv state=directory owner=vagrant group=vagrant recurse=yes
+- name: Changing virtualenv permissions
+  file: path=/opt/tutorial/virtualenv state=directory owner={{project_user}} group={{project_user}} recurse=yes
 
 
-- name: populating our database for the first time
+- name: Populating our database for the first time
   command: /opt/tutorial/virtualenv/bin/python manage.py migrate --settings=tutorial.settings_env chdir=/vagrant/tutorial creates=/opt/tutorial/db.sqlite3
+  notify:
+  - restart gunicorn
 
 
-- name: gunicorn service state
+- name: Starting gunicorn
   service: name=gunicorn_tutorial state=started enabled=yes

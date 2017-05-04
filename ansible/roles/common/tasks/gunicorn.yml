@@ -2,41 +2,54 @@
 # Setting up gunicorn
 
 - name: Creating gunicorn home directory
-  file: path=/opt/tutorial/gunicorn state=directory owner={{project_user}} group={{project_user}}
+  file: path="{{ gunicorn_directory}}" state=directory owner="{{project_user}}" group="{{project_user}}"
 
 
 - name: Setting up gunicorn config file
-  template: src=gunicorn-init.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-init.config owner={{project_user}} group={{project_user}}
+  template: src=gunicorn-init.config.j2 dest="{{ gunicorn_directory }}/gunicorn-init.config" owner="{{project_user}}" group="{{project_user}}"
   notify:
   - restart gunicorn
 
 
+# Systemd is only present on EL7 and Ubuntu 16.04 systems
 - name: Placing gunicorn systemd init file
-  template: src=gunicorn_tutorial.service.j2 dest=/etc/systemd/system/gunicorn_tutorial.service owner=root group=root mode=0644
+  template: src=gunicorn_tutorial.systemd.j2 dest=/etc/systemd/system/gunicorn_tutorial.service owner=root group=root mode=0644
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+  notify:
+  - restart gunicorn
+
+
+# Upstart is only present on EL6 and Ubuntu 14.04 systems
+- name: Placing gunicorn upstart init file
+  template: src=gunicorn_tutorial.upstart.j2 dest=/etc/init/gunicorn_tutorial.conf owner=root group=root mode=0644
+  when:
+    - ansible_distribution == "Ubuntu"
   notify:
   - restart gunicorn
 
 
 - name: Setting up gunicorn logging file
-  template: src=gunicorn-logging.config.j2 dest=/opt/tutorial/gunicorn/gunicorn-logging.config owner={{project_user}} group={{project_user}}
+  template: src=gunicorn-logging.config.j2 dest="{{ gunicorn_directory }}/gunicorn-logging.config" owner="{{ project_user }}" group="{{ project_user }}"
   notify:
   - restart gunicorn
 
 
 - name: Creating virtualenv
-  command: virtualenv --unzip-setuptools --no-site-packages /opt/tutorial/virtualenv creates=/opt/tutorial/virtualenv
+  command: virtualenv --unzip-setuptools --no-site-packages "{{ virtualenv_directory }}" creates="{{ virtualenv_directory }}"
 
 
 - name: Running pip install
-  command: /opt/tutorial/virtualenv/bin/pip install -r /vagrant/tutorial/requirements.txt
+  command: "{{ virtualenv_directory }}/bin/pip install -r /vagrant/tutorial/requirements.txt"
 
 
 - name: Changing virtualenv permissions
-  file: path=/opt/tutorial/virtualenv state=directory owner={{project_user}} group={{project_user}} recurse=yes
+  file: path="{{ virtualenv_directory }}" state=directory owner="{{ project_user }}" group="{{ project_user }}" recurse=yes
 
 
 - name: Populating our database for the first time
-  command: /opt/tutorial/virtualenv/bin/python manage.py migrate --settings=tutorial.settings_env chdir=/vagrant/tutorial creates=/opt/tutorial/db.sqlite3
+  command: /opt/tutorial/virtualenv/bin/python manage.py migrate --settings=tutorial.settings_env chdir=/vagrant/tutorial creates={{ local_db_file }}
   notify:
   - restart gunicorn
 

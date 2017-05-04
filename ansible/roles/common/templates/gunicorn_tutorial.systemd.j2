@@ -9,10 +9,10 @@ Type=forking
 # 1- systemd does not accept 'export FOO=bar'
 # 2- Python does not have access to a instance var (example: FOO=bar)
 Environment="ENVIRONMENT=dev"
-PIDFile=/opt/tutorial/gunicorn_tutorial.pid
+PIDFile={{ gunicorn_pid_file }}
 User=vagrant
 WorkingDirectory=/vagrant/tutorial
-ExecStart=/opt/tutorial/virtualenv/bin/gunicorn -e DJANGO_SETTINGS_MODULE=tutorial.settings_env -c /opt/tutorial/gunicorn/gunicorn-init.config tutorial.wsgi
+ExecStart={{ virtualenv_directory }}/bin/gunicorn -e DJANGO_SETTINGS_MODULE=tutorial.settings_env -c {{ gunicorn_directory }}/gunicorn-init.config tutorial.wsgi
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStop=/bin/kill -9 $MAINPID
 

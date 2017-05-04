@@ -2,7 +2,7 @@
 # Setting up gunicorn
 
 - name: creating nginx home directory
-  file: path=/opt/tutorial/nginx state=directory owner=vagrant group=vagrant
+  file: path="{{ nginx_directory }}" state=directory owner=vagrant group=vagrant
 
 
 - name: Creating nginx pid directory
@@ -10,13 +10,26 @@
 
 
 - name: Setting up nginx config file
-  template: src=nginx.config.j2 dest=/opt/tutorial/nginx/nginx.config owner=vagrant group=vagrant
+  template: src=nginx.config.j2 dest="{{ nginx_directory }}/nginx.config" owner=vagrant group=vagrant
   notify:
   - reload nginx
 
 
+# Systemd is only present on EL7 and Ubuntu 16.04 systems
 - name: Placing nginx systemd file
-  template: src=nginx_tutorial.service.j2 dest=/etc/systemd/system/nginx_tutorial.service owner=root group=root mode=0644
+  template: src=nginx_tutorial.systemd.j2 dest=/etc/systemd/system/nginx_tutorial.service owner=root group=root mode=0644
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+  notify:
+  - reload nginx
+
+
+# Upstart is only present on EL6 and Ubuntu 14.04 systems
+- name: Placing nginx file
+  template: src=nginx_tutorial.upstart.j2 dest=/etc/init/nginx_tutorial.conf owner=root group=root mode=0644
+  when:
+    - ansible_distribution == "Ubuntu"
   notify:
   - reload nginx
 

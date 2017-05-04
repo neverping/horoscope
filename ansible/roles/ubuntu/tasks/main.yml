@@ -1,0 +1,13 @@
+---
+# These tasks install Ubuntu specific requirements.
+
+- name: Installing nginx
+  apt: name=nginx state=installed update_cache=yes
+
+
+- name: Installing essential Python packages
+  apt: name={{ item }} state=installed
+  with_items:
+    - python-virtualenv
+
+

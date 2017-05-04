@@ -1,4 +1,16 @@
 ---
 # Variables listed here are applicable to all host groups
-project_home_directory: /opt/tutorial
+project_home_directory: "/opt/tutorial"
 project_user: vagrant
+
+# Gunicorn & app
+gunicorn_directory: "{{ project_home_directory }}/gunicorn"
+virtualenv_directory: "{{ project_home_directory }}/virtualenv"
+gunicorn_pid_file: "{{ gunicorn_directory }}/gunicorn_tutorial.pid"
+local_db_file: "{{ project_home_directory }}/db.sqlite3"
+
+# Nginx
+nginx_directory: "{{ project_home_directory }}/nginx"
+nginx_pid_file: "/var/run/nginx_tutorial.pid"
+
+# Systemd

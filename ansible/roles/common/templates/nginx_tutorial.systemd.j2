@@ -4,15 +4,15 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-PIDFile=/var/run/nginx_tutorial.pid
+PIDFile={{ nginx_pid_file }}
 User=root
 WorkingDirectory=/vagrant/tutorial
 # nginx fails to self testing when using a a nologin account such as nobody.
 # for now, when testing, do it manually.
-#ExecStartPre=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -t
-ExecStart=/sbin/nginx -c /opt/tutorial/nginx/nginx.config
-ExecReload=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -s reload
-ExecStop=/sbin/nginx -c /opt/tutorial/nginx/nginx.config -s stop
+#ExecStartPre=/sbin/nginx -c {{ nginx_directory }}/nginx.config -t
+ExecStart=/sbin/nginx -c {{ nginx_directory }}/nginx.config
+ExecReload=/sbin/nginx -c {{ nginx_directory }}/nginx.config -s reload
+ExecStop=/sbin/nginx -c {{ nginx_directory }}/nginx.config -s stop
 KillSignal=SIGQUIT
 TimeoutStopSec=5
 KillMode=process

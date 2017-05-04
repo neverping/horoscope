@@ -2,7 +2,11 @@
 # Handler to handle restart notifications
 
 
-- name: restart gunicorn
+- name: systemd restart gunicorn
+  listen: "restart gunicorn"
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
   systemd:
     name: gunicorn_tutorial
     state: restarted
@@ -10,9 +14,32 @@
     enabled: yes
 
 
-- name: reload nginx
+- name: upstart restart gunicorn
+  listen: "restart gunicorn"
+  when:
+    - ansible_distribution == "Ubuntu"
+  service:
+    name: gunicorn_tutorial
+    state: restarted
+    enabled: yes
+
+
+- name: systemd reload nginx
+  listen: "reload nginx"
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
   systemd:
     name: nginx_tutorial
     state: reloaded
     daemon_reload: yes
+    enabled: yes
+
+- name: upstart reload nginx
+  listen: "reload nginx"
+  when:
+    - ansible_distribution == "Ubuntu"
+  service:
+    name: nginx_tutorial
+    state: reloaded
     enabled: yes

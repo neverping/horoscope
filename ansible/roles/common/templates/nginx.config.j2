@@ -1,9 +1,14 @@
 worker_processes auto;
 
 error_log /tmp/nginx_tutorial_error.log;
-pid       /var/run/nginx_tutorial.pid;
+pid       {{ nginx_pid_file }};
 
+{% if ansible_distribution == "Ubuntu" %}
+user www-data;
+{% else %}
 user nobody;
+{% endif %}
+
 
 events {
     worker_connections 8;
@@ -55,7 +60,6 @@ http {
     gzip_types        text/plain text/css text/xml text/javascript application/x-javascript application/xml application/xml+rss application/json;
 
     ssi on;
-    ssi_last_modified on;
     ssi_silent_errors on;
 
     proxy_set_header       Host $host;
@@ -73,16 +77,11 @@ http {
         server localhost:8009 fail_timeout=0;
     }
 
-    #error_page 400 403 404     /errordocument/404.html=<$uri>;
-    #error_page 500 502 503 504 /errordocument/500.html=<$uri>;
-
     # VHost
     server {
         # Defualt approved port for SELinux
         listen      0.0.0.0:8008;
         server_name _;
-
-        #root /opt/tutorial/htdocs/;
 
         location ~ ^/ {
             proxy_pass http://app_backend;

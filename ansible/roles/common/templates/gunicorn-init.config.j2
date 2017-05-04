@@ -12,9 +12,9 @@ timeout = 120
 preload_app = True
 daemon = True
 
-pidfile = "/opt/tutorial/gunicorn_tutorial.pid"
+pidfile = "{{ gunicorn_pid_file }}"
 
-logconfig = "/opt/tutorial/gunicorn/gunicorn-logging.config"
+logconfig = "{{ gunicorn_directory }}/gunicorn-logging.config"
 loglevel = "ERROR"
 
 debug = False

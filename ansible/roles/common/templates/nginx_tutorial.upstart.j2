@@ -1,0 +1,26 @@
+# nginx
+
+description "nginx http daemon"
+author "Willian Braga <neverping@gmail.com>"
+
+start on (filesystem and net-device-up IFACE!=lo)
+stop on runlevel [!2345]
+
+env DAEMON=/usr/sbin/nginx
+env PID={{ nginx_pid_file }}
+env CONFIG={{ nginx_directory }}/nginx.config
+
+expect fork
+respawn
+respawn limit 10 5
+
+pre-start script
+        $DAEMON -t -c $CONFIG
+        if [ $? -ne 0 ]
+                then exit $?
+        fi
+end script
+
+post-stop exec $DAEMON -c $CONFIG -s stop
+
+exec $DAEMON -c $CONFIG

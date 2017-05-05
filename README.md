@@ -1,10 +1,10 @@
 # Sample Django Application
 
-This project is a small Django PoC, using Vagrant as local environment and Ansible as a configuration management.
+This is a small Django PoC, using Vagrant as local environment and Ansible as a configuration management.
 
-This project was setup to be used under CentOS 7.3, but it would work on any other EL7 Linux distribution, such as Red Hat Enterprise Linux 7, Scientific Linux 7 or Oracle Linux. Ubuntu support still a WIP.
+This project was setup to be used under CentOS 7.3, but it would work on any other EL7 Linux distribution, such as Red Hat Enterprise Linux 7, Scientific Linux 7 or Oracle Linux. There's also support for Ubuntu 14.04.
 
-The project was is also using nginx as a webserver and gunicorn as a WSGI HTTP Server. MariaDB/MySQL as a database will be supported soon.
+The project is also using nginx as a webserver and gunicorn as a WSGI HTTP Server. MariaDB/MySQL as a database will be supported soon.
 
 ### TO HOW SETUP / INSTALL WITH VAGRANT
 
@@ -36,7 +36,6 @@ Vagrant is a command line utily for managing the lifecycle of virtual machines o
 
 Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
 
-
 3.1 - For MacOS, it is recommended using [Homebrew](https://brew.sh/) and installing it with the following command:
 
     brew install ansible
@@ -49,7 +48,7 @@ Ansible is an open-source automation engine that automates software provisioning
 
 It is recommended using Python Virtualenv for environment isolation between system packages and project packages.
 
-You can check if you already have virtualenv by running (```virtualenv --version```) in your shell. Pip comes with virtualenv.
+You can check if you already have virtualenv running (```virtualenv --version```) in your shell. Pip comes with virtualenv.
 
 4.1 - For MacOS, you can download it from [here](https://pypi.python.org/pypi/virtualenv):
 
@@ -90,8 +89,14 @@ Open your favourite web browser and hit (```http://localhost:9999```)
 
 5.2 - Running Django on the provisioned virtual machine.
 
-```bash
-vagrant up centos
-```
+5.2.1 - Running on CentOS machine:
+
+    vagrant up centos
 
 After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:8888```)
+
+5.2.2 - Running on Ubuntu machine:
+
+    vagrant up ubuntu
+
+After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:9999```)

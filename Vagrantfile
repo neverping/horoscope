@@ -10,6 +10,9 @@
 
 
 Vagrant.configure(2) do |config|
+  # SEE: https://github.com/hashicorp/vagrant/issues/9442
+  #Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
   # NOTE: On Vagrant 1.8.5, there's a bug with Vagrant managing the default
   # private ssh key. More details: https://github.com/mitchellh/vagrant/issues/7610
   #
@@ -33,7 +36,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :ubuntu, primary: false, autostart: false do |ubuntu|
-    ubuntu.vm.box = "ubuntu/trusty64"
+    ubuntu.vm.box = "ubuntu/xenial64"
     ubuntu.vm.hostname = "ubuntu"
     ubuntu.vm.network "forwarded_port", guest: 8008, host: 9999
 

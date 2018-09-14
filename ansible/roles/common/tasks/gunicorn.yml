@@ -15,8 +15,9 @@
 - name: Placing gunicorn systemd init file
   template: src=gunicorn_tutorial.systemd.j2 dest=/etc/systemd/system/gunicorn_tutorial.service owner=root group=root mode=0644
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+    # TODO: Find a better way to handle this:
+    #- ansible_distribution == ['Ubuntu', 'CentOS']
+    #- ansible_distribution_major_version == ['7', '16', '18']
   notify:
   - restart gunicorn
 
@@ -26,6 +27,7 @@
   template: src=gunicorn_tutorial.upstart.j2 dest=/etc/init/gunicorn_tutorial.conf owner=root group=root mode=0644
   when:
     - ansible_distribution == "Ubuntu"
+    - ansible_distribution_release == "trusty"
   notify:
   - restart gunicorn
 

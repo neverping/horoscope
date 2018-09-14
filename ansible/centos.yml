@@ -7,3 +7,7 @@
   roles:
     - centos
     - common
+
+  vars:
+    nginx_bin: /sbin/nginx
+

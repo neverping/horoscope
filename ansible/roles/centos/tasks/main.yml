@@ -2,17 +2,17 @@
 # These tasks install CentOS specific requirements.
 
 - name: Installing EPEL
-  yum: name={{ item }} state=installed
+  yum: name={{ item }} state=present
   with_items:
     - epel-release.noarch
 
 
 - name: Installing nginx
-  yum: name=nginx state=installed update_cache=yes
+  yum: name=nginx state=present update_cache=yes
 
 
 - name: Installing essential Python packages
-  yum: name={{ item }} state=installed
+  yum: name={{ item }} state=present
   with_items:
     - python-virtualenv
 

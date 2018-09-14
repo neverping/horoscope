@@ -7,3 +7,6 @@
   roles:
     - ubuntu
     - common
+
+  vars:
+    nginx_bin: /usr/sbin/nginx

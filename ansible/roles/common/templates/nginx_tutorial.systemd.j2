@@ -9,10 +9,10 @@ User=root
 WorkingDirectory=/vagrant/tutorial
 # nginx fails to self testing when using a a nologin account such as nobody.
 # for now, when testing, do it manually.
-#ExecStartPre=/sbin/nginx -c {{ nginx_directory }}/nginx.config -t
-ExecStart=/sbin/nginx -c {{ nginx_directory }}/nginx.config
-ExecReload=/sbin/nginx -c {{ nginx_directory }}/nginx.config -s reload
-ExecStop=/sbin/nginx -c {{ nginx_directory }}/nginx.config -s stop
+#ExecStartPre={{ nginx_bin }} -c {{ nginx_directory }}/nginx.config -t
+ExecStart={{ nginx_bin }} -c {{ nginx_directory }}/nginx.config
+ExecReload={{ nginx_bin }} -c {{ nginx_directory }}/nginx.config -s reload
+ExecStop={{ nginx_bin }} -c {{ nginx_directory }}/nginx.config -s stop
 KillSignal=SIGQUIT
 TimeoutStopSec=5
 KillMode=process

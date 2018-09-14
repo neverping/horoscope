@@ -42,7 +42,12 @@ Vagrant.configure(2) do |config|
 
     ubuntu.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/ubuntu.yml"
-      ansible.sudo = true
+      ansible.become = true
+      ansible.become_user = "root"
+      ansible.compatibility_mode = "2.0"
+      # Ubuntu 18.04 LTS (Bionic Beaver) no longer has Python 2 installed.
+      # Preparing for the future over here.
+      ansible.extra_vars = { ansible_python_interpreter: "/usr/bin/python3" }
     end
 
   end
@@ -55,7 +60,8 @@ Vagrant.configure(2) do |config|
 
     centos.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/centos.yml"
-      ansible.sudo = true
+      ansible.become = true
+      ansible.become_user = "root"
     end
 
     # This will be needed on Django settings.

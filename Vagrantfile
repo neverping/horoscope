@@ -31,6 +31,10 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provider :virtualbox do |v|
+    # Ubuntu is creating a kernel log file in the host machine called
+    # ubuntu-xenial-16.04-cloudimg-console.log
+    # This config below will prevent this.
+    v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
     v.memory = 512
     v.cpus = 2
   end

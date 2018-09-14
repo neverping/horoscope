@@ -1,4 +1,4 @@
 # project essencials
 -r tutorial/requirements.txt
 # local dependencies.
-ansible==2.3.0.0
+ansible==2.6.4

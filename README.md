@@ -2,7 +2,7 @@
 
 This is a small Django PoC, using Vagrant as local environment and Ansible as a configuration management.
 
-This project was setup to be used under CentOS 7.3, but it would work on any other EL7 Linux distribution, such as Red Hat Enterprise Linux 7, Scientific Linux 7 or Oracle Linux. There's also support for Ubuntu 14.04.
+This project was setup to be used under CentOS 7.3, but it would work on any other EL7 Linux distribution, such as Red Hat Enterprise Linux 7, Scientific Linux 7 or Oracle Linux. There's also support for Ubuntu 16.04.
 
 The project is also using nginx as a webserver and gunicorn as a WSGI HTTP Server. MariaDB/MySQL as a database will be supported soon.
 
@@ -18,9 +18,9 @@ VirtualBox is a general-purpose full virtualizer for x86 hardware, and you can u
 
 1.2 - For Ubuntu/Debian users, you can install it with the following command below:
 
-    sudo apt-get install virtualbox
+    $ sudo apt-get install virtualbox
 
-#### 2- Install Vagrant.
+#### 2- Install Vagrant
 
 Vagrant is a command line utily for managing the lifecycle of virtual machines on a different types of providers. We will use VirtualBox as our provider.
 
@@ -30,53 +30,66 @@ Vagrant is a command line utily for managing the lifecycle of virtual machines o
 
 2.2 - For Ubuntu/Debian users, you can install it with the following command below:
 
-    sudo apt-get install vagrant
+    $ sudo apt-get install vagrant
 
-#### 3- Install Ansible.
+#### 3- Install Project requirements for local development using Virtualenv, Virtualenv-wrapper and pip.
 
-Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
+When working with Python, it is strongly recommended using Virtualenv and Virtualenv Wrapper for environment isolation between Python system packages and Python project packages.
 
-3.1 - For MacOS, it is recommended using [Homebrew](https://brew.sh/) and installing it with the following command:
+You can check if you already have virtualenv running ```virtualenv --version``` in your shell. Pip comes with virtualenv.
 
-    brew install ansible
-
-3.2 - For Ubuntu/Debian users, you can install it with the following command below:
-
-    sudo apt-get install ansible
-
-#### 4- Install Project requirements for local development using Virtualenv and pip.
-
-It is recommended using Python Virtualenv for environment isolation between system packages and project packages.
-
-You can check if you already have virtualenv running (```virtualenv --version```) in your shell. Pip comes with virtualenv.
-
-4.1 - For MacOS, you can download it from [here](https://pypi.python.org/pypi/virtualenv):
+3.1 - For MacOS, you can download it from [here](https://pypi.python.org/pypi/virtualenv):
 
 These are the steps for downloading and installing it.
+
 ```bash 
-curl -so virtualenv.tgz https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz#md5=44e19f4134906fe2d75124427dc9b716 
-tar zxf virtualenv.tgz 
-cd virtualenv-15.1.0
-python setup.py build 
-sudo python setup.py install
+$ curl -so virtualenv.tgz https://files.pythonhosted.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz
+$ tar zxf virtualenv.tgz 
+$ cd virtualenv-15.1.0
+$ python setup.py build 
+$ sudo python setup.py install
 ``` 
 
-4.2 - For Ubuntu/Debian users, you can install it with the following command below:<BR>
+And now for Virtualenv Wrapper:
 
-    sudo apt-get install python-virtualenv
+    $ sudo pip install virtualenvwrapper
 
-After installing virtualenv, you may create your own Python environment and install the project requirements with the following steps:
+<B>Note</B>: virtualenvwrapper keeps all the virtual environments in ~/.virtualenv while virtualenv keeps them in the project directory.
+
+3.2 - For Ubuntu/Debian users, you can install it with the following command below:<BR>
+
+    $ sudo apt-get install python-virtualenv virtualenvwrapper
+
+After installing virtualenv and virtualenvwrapper, you need to close the Terminal and open it again, so your Bash profile will be updated and then you can start using virtualenv-wrapper. You can start working with virtualenv by doing the steps below for both Mac and Linux users.
 
 ```bash
-virtualenv --unzip-setuptools ~/virtualenvs/sample_django_site
-~/virtualenv/sample_django_site/bin/pip install -r requirements.txt
+$ mkvirtualenv sample_django_app
+$ pip install -r requirements.txt
 ```
 
-#### 5- Getting it up and running (finally!)
+The output for both commands will be something like this:
+
+```bash
+Running virtualenv with interpreter /usr/bin/python2
+New python executable in /home/$YOUR_USERNAME/.virtualenvs/sample_django_app/bin/python2
+Also creating executable in /home/$YOUR_USERNAME/.virtualenvs/sample_django_app/bin/python
+Installing setuptools, pkg_resources, pip, wheel...done.
+(sample_django_app) $ <--- prompt will show your current virtualenv.
+
+(...)
+
+(sample_django_app) $ pip install -r requirements.txt 
+Collecting Django==1.11.16 (from -r tutorial/requirements.txt (line 1))
+(...)
+Installing collected packages: pytz, Django, (...)
+Successfully installed Django-1.11.16 (...)
+```
+
+#### 4- Getting it up and running (finally!)
 
 After all these steps completed, you can run this project using two methods:
 
-5.1 - Running Django on your own machine:
+4.1 - Running Django on your own machine:
 
 ```bash
 cd tutorial
@@ -85,18 +98,18 @@ python manage.py test
 python manage.py runserver 0:9999
 ```
 
-Open your favourite web browser and hit (```http://localhost:9999```)
+Open your favourite web browser and hit ```http://localhost:9999```
 
-5.2 - Running Django on the provisioned virtual machine.
+4.2 - Running Django on the provisioned virtual machine.
 
-5.2.1 - Running on CentOS machine:
+4.2.1 - Running on CentOS machine:
 
-    vagrant up centos
+    $ vagrant up centos
 
 After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:8888```)
 
-5.2.2 - Running on Ubuntu machine:
+4.2.2 - Running on Ubuntu machine:
 
-    vagrant up ubuntu
+    $ vagrant up ubuntu
 
 After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:9999```)

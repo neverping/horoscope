@@ -67,7 +67,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question.>"]
+            [u"<Question: Past question.>".encode('utf-8'), u"<Question: What's your favourite Linux Distribution?>".encode('utf-8')]
         )
 
     def test_index_view_with_a_future_question(self):
@@ -93,7 +93,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question.>"]
+            [u"<Question: Past question.>".encode('utf-8'), u"<Question: What's your favourite Linux Distribution?>".encode('utf-8')]
         )
 
     def test_index_view_with_two_past_questions(self):
@@ -105,7 +105,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ["<Question: What's your favourite Linux Distribution?>", "<Question: Past question 2.>", "<Question: Past question 1.>"]
+            [u"<Question: Past question 2.>".encode('utf-8'), u"<Question: Past question 1.>".encode('utf-8'), u"<Question: What's your favourite Linux Distribution?>".encode('utf-8')]
         )
 
 

@@ -106,10 +106,10 @@ Open your favourite web browser and hit ```http://localhost:9999```
 
     $ vagrant up centos
 
-After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:8888```)
+After Vagrant finishes, you may open your favourite web browser and hit ```http://localhost:8888```
 
 4.2.2 - Running on Ubuntu machine:
 
     $ vagrant up ubuntu
 
-After Vagrant finishes, you may open your favourite web browser and hit (```http://localhost:9999```)
+After Vagrant finishes, you may open your favourite web browser and hit ```http://localhost:9999```

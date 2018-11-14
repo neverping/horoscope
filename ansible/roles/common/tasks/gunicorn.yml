@@ -40,18 +40,20 @@
 
 - name: Creating virtualenv
   command: virtualenv --unzip-setuptools --no-site-packages "{{ virtualenv_directory }}" creates="{{ virtualenv_directory }}"
+  become: yes
+  become_user: vagrant
 
 
 - name: Running pip install
   command: "{{ virtualenv_directory }}/bin/pip install -r /vagrant/tutorial/requirements.txt"
-
-
-- name: Changing virtualenv permissions
-  file: path="{{ virtualenv_directory }}" state=directory owner="{{ project_user }}" group="{{ project_user }}" recurse=yes
+  become: yes
+  become_user: vagrant
 
 
 - name: Populating our database for the first time
   command: /opt/tutorial/virtualenv/bin/python manage.py migrate --settings=tutorial.settings_env chdir=/vagrant/tutorial creates={{ local_db_file }}
+  become: yes
+  become_user: vagrant
   notify:
   - restart gunicorn
 

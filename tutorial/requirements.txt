@@ -1,4 +1,4 @@
-Django==1.11
+Django==1.11.16
 # Depedencies for Django
 pytz
 # WSGI Server

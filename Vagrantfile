@@ -66,6 +66,7 @@ Vagrant.configure(2) do |config|
       ansible.playbook = "ansible/centos.yml"
       ansible.become = true
       ansible.become_user = "root"
+      ansible.compatibility_mode = "2.0"
     end
 
     # This will be needed on Django settings.

@@ -92,10 +92,10 @@ After all these steps completed, you can run this project using two methods:
 4.1 - Running Django on your own machine:
 
 ```bash
-cd tutorial
-python manage.py migrate
-python manage.py test
-python manage.py runserver 0:9999
+$ cd tutorial
+$ python manage.py migrate
+$ python manage.py test
+$ python manage.py runserver 0:9999
 ```
 
 Open your favourite web browser and hit ```http://localhost:9999```
